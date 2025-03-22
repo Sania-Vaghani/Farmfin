@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="text-center mb-5">
+            <h1 class="display-4">Alternative Credit Evaluation Tool for Farmers</h1>
+            <p class="lead">A modern approach to assess farmer creditworthiness using advanced data analytics</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Smart Data Integration</h5>
+                        <p class="card-text">Utilizes GIS data, weather forecasts, and soil health metrics to provide comprehensive evaluation.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Transparent Scoring</h5>
+                        <p class="card-text">Clear and explainable credit scoring system that financial institutions can trust.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Region Adaptive</h5>
+                        <p class="card-text">Designed to work across different regions with diverse farming conditions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            {% if not current_user.is_authenticated %}
+                <div class="mb-4">
+                    <h3>Get Started Today</h3>
+                    <p>Register as a farmer or financial institution to access the tool.</p>
+                </div>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mb-2">Register Now</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 
