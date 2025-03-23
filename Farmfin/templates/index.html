@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">Welcome to Farmfin</h1>
+        <p class="lead mb-5">Agricultural Loan Management System</p>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-user-farmer fa-3x mb-3 text-success"></i>
+                        <h3 class="card-title">Farmer Portal</h3>
+                        <p class="card-text">Access your agricultural loan services and manage your applications.</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('farmer_login') }}" class="btn btn-primary">Login</a>
+                            <a href="{{ url_for('farmer_signup') }}" class="btn btn-outline-primary">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-university fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title">Bank Portal</h3>
+                        <p class="card-text">Bank employees can process loan applications and manage farmer accounts.</p>
+                        <div class="d-grid">
+                            <a href="{{ url_for('bank_login') }}" class="btn btn-primary">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

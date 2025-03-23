@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Welcome, {{ current_user.name }} - {{ bank_name }}</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Pending Applications -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Pending Loan Applications</h4>
+        </div>
+        <div class="card-body">
+            {% if pending_loans %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Farmer Name</th>
+                                <th>Amount</th>
+                                <th>Credit Score</th>
+                                <th>Applied Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in pending_loans %}
+                                <tr>
+                                    <td>{{ loan.id }}</td>
+                                    <td>{{ loan.farmer.name }}</td>
+                                    <td>₹{{ loan.amount }}</td>
+                                    <td>{{ loan.credit_score }}</td>
+                                    <td>{{ loan.applied_date.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('view_loan_details', loan_id=loan.id) }}" class="btn btn-sm btn-info">View Details</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No pending loan applications.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Approved Loans -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Approved Loans</h4>
+        </div>
+        <div class="card-body">
+            {% if approved_loans %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Farmer Name</th>
+                                <th>Amount</th>
+                                <th>Credit Score</th>
+                                <th>Approved Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in approved_loans %}
+                                <tr>
+                                    <td>{{ loan.id }}</td>
+                                    <td>{{ loan.farmer.name }}</td>
+                                    <td>₹{{ loan.amount }}</td>
+                                    <td>{{ loan.credit_score }}</td>
+                                    <td>{{ loan.processed_date.strftime('%Y-%m-%d') }}</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No approved loans.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Rejected Loans -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Rejected Loans</h4>
+        </div>
+        <div class="card-body">
+            {% if rejected_loans %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Farmer Name</th>
+                                <th>Amount</th>
+                                <th>Credit Score</th>
+                                <th>Rejected Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in rejected_loans %}
+                                <tr>
+                                    <td>{{ loan.id }}</td>
+                                    <td>{{ loan.farmer.name }}</td>
+                                    <td>₹{{ loan.amount }}</td>
+                                    <td>{{ loan.credit_score }}</td>
+                                    <td>{{ loan.processed_date.strftime('%Y-%m-%d') }}</td>
+                                    <td><span class="badge bg-danger">Rejected</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No rejected loans.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+{% endblock %} 

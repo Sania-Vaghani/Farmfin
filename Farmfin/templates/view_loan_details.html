@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Loan Application Details</h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Farmer Information</h5>
+                            <p><strong>Name:</strong> {{ loan.farmer.name }}</p>
+                            <p><strong>Aadhar Number:</strong> {{ loan.farmer.aadhar_number }}</p>
+                            <p><strong>Mobile:</strong> {{ loan.farmer.mobile_number }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Loan Information</h5>
+                            <p><strong>Loan ID:</strong> {{ loan.id }}</p>
+                            <p><strong>Amount:</strong> ₹{{ loan.amount }}</p>
+                            <p><strong>Credit Score:</strong> {{ loan.credit_score }}</p>
+                            <p><strong>Applied Date:</strong> {{ loan.applied_date.strftime('%Y-%m-%d') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5>Land Details (7/11 Form)</h5>
+                            <p><strong>Form Number:</strong> {{ loan.saatbaar.form_number }}</p>
+                            <p><strong>Location:</strong> {{ loan.saatbaar.location }}</p>
+                            <p><strong>Land Area:</strong> {{ loan.saatbaar.land_area }} acres</p>
+                            <p><strong>Soil Type:</strong> {{ loan.saatbaar.soil_type }}</p>
+                            <p><strong>Crops Grown:</strong> {{ loan.saatbaar.crops_grown }}</p>
+                            <p><strong>Annual Revenue:</strong> ₹{{ loan.saatbaar.annual_revenue }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if loan.status == 'pending' %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Process Loan Application</h5>
+                                <form method="POST" action="{{ url_for('process_loan_details', loan_id=loan.id) }}">
+                                    <div class="form-group mb-3">
+                                        <label for="remarks">Remarks (Optional)</label>
+                                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" name="action" value="approve" class="btn btn-success">Approve Loan</button>
+                                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject Loan</button>
+                                        <a href="{{ url_for('bank_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Loan Status</h5>
+                                <p><strong>Status:</strong> 
+                                    {% if loan.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Processed Date:</strong> {{ loan.processed_date.strftime('%Y-%m-%d') }}</p>
+                                {% if loan.remarks %}
+                                    <p><strong>Remarks:</strong> {{ loan.remarks }}</p>
+                                {% endif %}
+                                
+                                <div class="mt-3">
+                                    <a href="{{ url_for('bank_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

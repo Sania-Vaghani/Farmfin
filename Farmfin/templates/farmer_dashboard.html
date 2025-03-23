@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Enter 7/11 Form Number</h5>
+                <form method="POST" action="{{ url_for('farmer_dashboard') }}">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="form_number" placeholder="Enter Form Number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Credit Score</h5>
+                {% if credit_score %}
+                <div class="text-center">
+                    <h2 class="display-4">{{ credit_score }}</h2>
+                    <div class="progress mb-3">
+                        <div class="progress-bar {% if credit_score >= 70 %}bg-success{% elif credit_score >= 40 %}bg-warning{% else %}bg-danger{% endif %}" 
+                             role="progressbar" 
+                             style="width: {{ credit_score }}%">
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted">Enter your 7/11 form number to view your credit score.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Loan Applications</h5>
+                <div class="list-group">
+                    <a href="{{ url_for('apply_loan') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-plus-circle me-2"></i>Apply for New Loan
+                    </a>
+                    <a href="{{ url_for('view_applications') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-list me-2"></i>View Applications
+                    </a>
+                    <a href="{{ url_for('view_active_loans') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-check-circle me-2"></i>Active Loans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        {% if saatbaar_data %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Land Details</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Location:</strong> {{ saatbaar_data.location }}</p>
+                        <p><strong>Land Area:</strong> {{ saatbaar_data.land_area }} Ha</p>
+                        <p><strong>Soil Type:</strong> {{ saatbaar_data.soil_type }}</p>
+                        <p><strong>Irrigation Source:</strong> {{ saatbaar_data.irrigation_source }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Encumbrances:</strong> {{ saatbaar_data.encumbrances }}</p>
+                        <p><strong>Litigation Status:</strong> {{ saatbaar_data.litigation_status }}</p>
+                        <p><strong>Crops Grown:</strong> {{ saatbaar_data.crops_grown }}</p>
+                        <p><strong>Revenue:</strong> ₹{{ saatbaar_data.revenue }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Recommended Crops</h5>
+                <div class="row">
+                    {% for crop in recommended_crops %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ crop.name }}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">Market Price: ₹{{ crop.market_price }}/kg</small>
+                                </p>
+                                <p class="card-text">{{ crop.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Weather Forecast</h5>
+                <div class="row">
+                    {% for day in weather_forecast %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">{{ day.date }}</h6>
+                                <p class="card-text">
+                                    <i class="fas fa-temperature-high"></i> {{ day.max_temp }}°C<br>
+                                    <i class="fas fa-temperature-low"></i> {{ day.min_temp }}°C<br>
+                                    <i class="fas fa-cloud-rain"></i> {{ day.rainfall }}mm
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Welcome to Your Dashboard</h5>
+                <p class="card-text">Please enter your 7/11 form number to view your land details and get personalized recommendations.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

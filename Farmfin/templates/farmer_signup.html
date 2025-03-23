@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Farmer Registration</h3>
+                <form id="signupForm" method="POST" action="{{ url_for('farmer_signup') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="aadhar" class="form-label">Aadhar Number</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="aadhar" name="aadhar" pattern="[0-9]{12}" maxlength="12" required>
+                            <button type="button" class="btn btn-outline-primary" id="verifyAadhar">Verify</button>
+                        </div>
+                        <div id="aadharStatus" class="form-text"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="mobile" class="form-label">Mobile Number</label>
+                        <div class="input-group">
+                            <input type="tel" class="form-control" id="mobile" name="mobile" pattern="[0-9]{10}" maxlength="10" required>
+                            <button type="button" class="btn btn-outline-primary" id="sendOTP">Send OTP</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="otpSection" style="display: none;">
+                        <label for="otp" class="form-label">Enter OTP</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="otp" name="otp" maxlength="6">
+                            <button type="button" class="btn btn-outline-primary" id="verifyOTP">Verify OTP</button>
+                        </div>
+                        <div id="otpStatus" class="form-text"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Register</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a href="{{ url_for('farmer_login') }}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const aadharInput = document.getElementById('aadhar');
+    const mobileInput = document.getElementById('mobile');
+    const otpSection = document.getElementById('otpSection');
+    const otpInput = document.getElementById('otp');
+    let aadharVerified = false;
+    let otpVerified = false;
+
+    // Aadhar verification
+    document.getElementById('verifyAadhar').addEventListener('click', function() {
+        const aadhar = aadharInput.value;
+        if (aadhar.length === 12) {
+            // Here you would typically make an API call to verify Aadhar
+            // For demo purposes, we'll just simulate it
+            setTimeout(() => {
+                aadharVerified = true;
+                document.getElementById('aadharStatus').innerHTML = 
+                    '<span class="text-success"><i class="fas fa-check-circle"></i> Aadhar verified</span>';
+            }, 1000);
+        } else {
+            document.getElementById('aadharStatus').innerHTML = 
+                '<span class="text-danger"><i class="fas fa-times-circle"></i> Invalid Aadhar number</span>';
+        }
+    });
+
+    // Send OTP
+    document.getElementById('sendOTP').addEventListener('click', function() {
+        const mobile = mobileInput.value;
+        if (mobile.length === 10) {
+            otpSection.style.display = 'block';
+            // Here you would typically make an API call to send OTP
+            // For demo purposes, we'll just simulate it
+            setTimeout(() => {
+                alert('OTP sent successfully! (Demo: 123456)');
+            }, 1000);
+        } else {
+            alert('Please enter a valid mobile number');
+        }
+    });
+
+    // Verify OTP
+    document.getElementById('verifyOTP').addEventListener('click', function() {
+        const otp = otpInput.value;
+        if (otp === '123456') { // Demo OTP
+            otpVerified = true;
+            document.getElementById('otpStatus').innerHTML = 
+                '<span class="text-success"><i class="fas fa-check-circle"></i> OTP verified</span>';
+        } else {
+            document.getElementById('otpStatus').innerHTML = 
+                '<span class="text-danger"><i class="fas fa-times-circle"></i> Invalid OTP</span>';
+        }
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!aadharVerified) {
+            e.preventDefault();
+            alert('Please verify your Aadhar number first');
+            return;
+        }
+        
+        if (!otpVerified) {
+            e.preventDefault();
+            alert('Please verify your mobile number with OTP first');
+            return;
+        }
+        
+        if (password.length < 6) {
+            e.preventDefault();
+            alert('Password must be at least 6 characters long');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match');
+            return;
+        }
+    });
+});
+</script>
+{% endblock %} 

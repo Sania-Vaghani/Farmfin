@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>My Active Loans</h3>
+        </div>
+        <div class="card-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% if active_loans %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Amount</th>
+                                <th>Credit Score</th>
+                                <th>Approved Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in active_loans %}
+                                <tr>
+                                    <td>{{ loan.id }}</td>
+                                    <td>₹{{ "%.2f"|format(loan.amount) }}</td>
+                                    <td>
+                                        <span class="badge {% if loan.credit_score >= 70 %}bg-success{% elif loan.credit_score >= 40 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ loan.credit_score }}
+                                        </span>
+                                    </td>
+                                    <td>{{ loan.processed_date.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <span class="badge bg-success">Active</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-center">You don't have any active loans at the moment.</p>
+            {% endif %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('farmer_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

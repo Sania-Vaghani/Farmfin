@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Saatbaar Registration</h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="form_number">Form Number</label>
+                                    <input type="text" class="form-control" id="form_number" name="form_number" required>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" required>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="longitude">Longitude</label>
+                                    <input type="number" step="any" class="form-control" id="longitude" name="longitude" required>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="latitude">Latitude</label>
+                                    <input type="number" step="any" class="form-control" id="latitude" name="latitude" required>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="land_area">Land Area (in hectares)</label>
+                                    <input type="number" step="any" class="form-control" id="land_area" name="land_area" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="encumbrances">Encumbrances</label>
+                                    <select class="form-control" id="encumbrances" name="encumbrances" required>
+                                        <option value="None">None</option>
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="litigation_status">Litigation Status</label>
+                                    <select class="form-control" id="litigation_status" name="litigation_status" required>
+                                        <option value="None">None</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Resolved">Resolved</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="irrigation_source">Irrigation Source</label>
+                                    <select class="form-control" id="irrigation_source" name="irrigation_source" required>
+                                        <option value="Canal">Canal</option>
+                                        <option value="Borewell">Borewell</option>
+                                        <option value="Mixed">Mixed</option>
+                                        <option value="Rainfed">Rainfed</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="soil_type">Soil Type</label>
+                                    <select class="form-control" id="soil_type" name="soil_type" required>
+                                        <option value="Black">Black</option>
+                                        <option value="Loamy">Loamy</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Sandy">Sandy</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="crops_grown">Crops Grown (comma-separated)</label>
+                                    <input type="text" class="form-control" id="crops_grown" name="crops_grown" 
+                                           placeholder="e.g., Wheat, Cotton, Sugarcane" required>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="revenue">Annual Revenue (in ₹)</label>
+                                    <input type="number" step="any" class="form-control" id="revenue" name="revenue" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Submit Registration</button>
+                            <a href="{{ url_for('farmer_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
